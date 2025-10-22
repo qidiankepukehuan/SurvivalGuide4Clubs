@@ -1,0 +1,25 @@
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO]{社团生存指南｜$title$} % 奇数页右上角
+\fancyhead[LE]{社团生存指南｜$title$} % 偶数页左上角
+\fancyfoot[RO]{\thepage}
+\fancyfoot[LE]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{15pt}
+
+\addcontentsline{toc}{chapter}{$title$}  % 添加到目录
+
+% 正文可视标题区，保留原样式
+{\raggedright
+  \zihao{4}\fangsong 文／$author$
+}
+
+\vspace{2mm}
+
+{\raggedright
+  \zihao{1}\heiti $title$
+}
+
+\vspace{2mm}
+$body$
