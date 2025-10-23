@@ -31,13 +31,15 @@ jobs:
       - name: Install TeX Live and fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-full latexmk fonts-noto-cjk fonts-noto-cjk-extra
+          sudo apt-get install -y \
+            texlive-xetex texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended \
+            fonts-noto-cjk fonts-liberation latexmk
           fc-cache -fv
 
       # --- Step 5. 构建 PDF ---
       - name: Build LaTeX project
         run: |
-          uv run python main.py --enable-md2tex --clean
+          uv run python main.py
 
       # --- Step 6. 打包 latex 文件夹 ---
       - name: Package latex directory
