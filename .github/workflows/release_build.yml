@@ -15,19 +15,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # --- Step 2. 安装 uv 环境管理器 ---
+      # --- Step 2. 安装 Pandoc ---
+      - name: Install Pandoc
+        run: |
+          # 方法1: 通过 apt 安装（版本可能较旧但稳定）
+          sudo apt-get update
+          sudo apt-get install -y pandoc
+          
+          # 或者方法2: 安装特定版本（推荐，兼容性更好）
+          # cd /tmp
+          # wget -c https://github.com/jgm/pandoc/releases/download/2.19.2/pandoc-2.19.2-1-amd64.deb
+          # sudo dpkg -i pandoc-2.19.2-1-amd64.deb
+          
+          # 验证安装
+          pandoc --version
+
+      # --- Step 3. 安装 uv 环境管理器 ---
       - name: Install uv
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "${HOME}/.cargo/bin" >> $GITHUB_PATH
 
-      # --- Step 3. 使用 uv 创建虚拟环境并安装依赖 ---
+      # --- Step 4. 使用 uv 创建虚拟环境并安装依赖 ---
       - name: Setup Python environment with uv
         run: |
           uv python install
           uv sync --all-extras --dev
 
-      # --- Step 4. 安装 LaTeX 环境与字体 ---
+      # --- Step 5. 安装 LaTeX 环境与字体 ---
       - name: Install TeX Live and fonts
         run: |
           sudo apt-get update
@@ -36,24 +51,24 @@ jobs:
             fonts-noto-cjk fonts-liberation latexmk
           fc-cache -fv
 
-      # --- Step 5. 构建 PDF ---
+      # --- Step 6. 构建 PDF ---
       - name: Build LaTeX project
         run: |
           uv run python main.py
 
-      # --- Step 6. 打包 latex 文件夹 ---
+      # --- Step 7. 打包 latex 文件夹 ---
       - name: Package latex directory
         run: |
           zip -r latex_source.zip latex
 
-      # --- Step 7. 查找生成的 PDF ---
+      # --- Step 8. 查找生成的 PDF ---
       - name: Find generated PDF
         id: find_pdf
         run: |
           PDF_PATH=$(find . -type f -name "*.pdf" | head -n 1)
           echo "pdf_path=$PDF_PATH" >> $GITHUB_OUTPUT
 
-      # --- Step 8. 创建 GitHub Release 并上传产物 ---
+      # --- Step 9. 创建 GitHub Release 并上传产物 ---
       - name: Create Release and Upload Artifacts
         uses: softprops/action-gh-release@v2
         with:
