@@ -94,11 +94,8 @@ jobs:
             echo "📜 初次发布，列出全部提交"
             git log --pretty=format:"- %s (%an)" > CHANGELOG.md
           fi
-      
-          # 写入 $GITHUB_OUTPUT，注意 EOF 必须独占一行且无缩进
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          cat CHANGELOG.md >> $GITHUB_OUTPUT
-          EOF
+          
+          printf 'changelog<<EOF\n%s\nEOF\n' "$(cat CHANGELOG.md)" >> $GITHUB_OUTPUT
 
       # --- Step 11. 创建 Release 并上传产物 ---
       - name: Create Release and Upload Artifacts
