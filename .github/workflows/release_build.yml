@@ -6,38 +6,34 @@ on:
       - "v*"  # 仅当 tag 以 v 开头时触发，例如 v1.0.0
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # --- Step 1. 检出代码 ---
+      # --- Step 1. 检出仓库 ---
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      # --- Step 2. 缓存 apt 软件包 ---
-      - name: Cache APT packages
-        uses: actions/cache@v4
         with:
-          path: /var/cache/apt/archives
-          key: ${{ runner.os }}-apt-${{ hashFiles('.github/workflows/*.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-apt-
+          fetch-depth: 0  # changelog 需要完整 git 历史
 
-      # --- Step 3. 安装 Pandoc ---
+      # --- Step 2. 安装 Pandoc ---
       - name: Install Pandoc
         run: |
           sudo apt-get update
           sudo apt-get install -y pandoc
           pandoc --version
 
-      # --- Step 4. 安装 uv 环境管理器 ---
+      # --- Step 3. 安装 uv 环境管理器 ---
       - name: Install uv
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
           echo "${HOME}/.cargo/bin" >> $GITHUB_PATH
 
-      # --- Step 5. 缓存 Python 虚拟环境 ---
+      # --- Step 4. 缓存 Python 虚拟环境 ---
       - name: Cache Python venv
         uses: actions/cache@v4
         with:
@@ -46,13 +42,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-uv-
 
-      # --- Step 6. 创建虚拟环境并安装依赖 ---
+      # --- Step 5. 创建虚拟环境并安装依赖 ---
       - name: Setup Python environment with uv
         run: |
           uv python install
           uv sync --all-extras --dev
 
-      # --- Step 7. 缓存 TeX Live 包 ---
+      # --- Step 6. 缓存 TeX Live ---
       - name: Cache TeX Live
         uses: actions/cache@v4
         with:
@@ -61,7 +57,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-texlive-
 
-      # --- Step 8. 安装 LaTeX 环境与字体（包含中文支持）---
+      # --- Step 7. 安装 LaTeX 环境与字体 ---
       - name: Install TeX Live and fonts
         run: |
           sudo apt-get update
@@ -70,29 +66,55 @@ jobs:
             texlive-lang-chinese fonts-noto-cjk fonts-liberation latexmk
           fc-cache -fv
 
-      # --- Step 9. 构建 PDF ---
+      # --- Step 8. 构建 PDF ---
       - name: Build LaTeX project
         run: |
+          mkdir -p build
           uv run python main.py
+          # 确保最终文件命名为 build/main.pdf
+          if [ -f "$(find . -type f -name '*.pdf' | head -n 1)" ]; then
+            mv "$(find . -type f -name '*.pdf' | head -n 1)" build/main.pdf
+          fi
+          ls -lh build/
 
-      # --- Step 10. 打包 latex 文件夹 ---
+      # --- Step 9. 打包 latex 文件夹 ---
       - name: Package latex directory
-        run: |
-          zip -r latex_source.zip latex
+        run: zip -r latex_source.zip latex
 
-      # --- Step 11. 查找生成的 PDF ---
-      - name: Find generated PDF
-        id: find_pdf
+      # --- Step 10. 生成 changelog ---
+      - name: Generate changelog
+        id: changelog
         run: |
-          PDF_PATH=$(find . -type f -name "*.pdf" | head -n 1)
-          echo "pdf_path=$PDF_PATH" >> $GITHUB_OUTPUT
+          TAG=${GITHUB_REF_NAME}
+          PREV_TAG=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null || echo "")
+          if [ -n "$PREV_TAG" ]; then
+            echo "📜 生成 ${PREV_TAG} → ${TAG} 的 changelog"
+            git log --pretty=format:"- %s (%an)" "${PREV_TAG}..${TAG}" > CHANGELOG.md
+          else
+            echo "📜 初次发布，列出全部提交"
+            git log --pretty=format:"- %s (%an)" > CHANGELOG.md
+          fi
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          cat CHANGELOG.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-      # --- Step 12. 创建 Release 并上传产物 ---
+      # --- Step 11. 创建 Release 并上传产物 ---
       - name: Create Release and Upload Artifacts
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ github.ref_name }}
+          name: "Release ${{ github.ref_name }}"
+          body: |
+            🚀 自动生成的 LaTeX 构建产物。
+
+            包含：
+            - 📘 main.pdf（最终构建文件）
+            - 📦 latex_source.zip（LaTeX 源文件）
+
+            ## 📝 更新日志
+            ${{ steps.changelog.outputs.changelog }}
           files: |
-            ${{ steps.find_pdf.outputs.pdf_path }}
+            build/main.pdf
             latex_source.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
