@@ -80,6 +80,7 @@ class LatexBuilder:
             print("[SKIP] 跳过 Markdown 转换。\n")
             return
         print("[STEP] 转换 Markdown → LaTeX ...")
+        self.CHAPTERS_DIR.mkdir(parents=True, exist_ok=True)
         for md_file in sorted(self.MARKDOWN_DIR.glob("*.md")):
             file_id = md_file.stem
             output_tex = self.CHAPTERS_DIR / f"{file_id}.tex"
