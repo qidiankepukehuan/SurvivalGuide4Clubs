@@ -16,9 +16,6 @@
 \usepackage{fancyhdr}
 \usepackage{fontspec}   % 页眉页脚
 \usepackage{hyperref}
-% 图片支持
-\usepackage{graphicx}
-\usepackage{adjustbox} % 可以自动缩放图片
 
 % 开启封面支持
 \newif\ifincludecover
@@ -31,23 +28,38 @@
 }
 
 % 图片支持
-\renewcommand{\topfraction}{0.95}    % 页面顶部浮动体最大占比
-\renewcommand{\bottomfraction}{0.95}  % 页面底部浮动体最大占比
-\renewcommand{\textfraction}{0.05}    % 文本最小占比
-\setcounter{topnumber}{4}             % 页面顶部最多浮动体数量
-\setcounter{bottomnumber}{4}          % 页面底部最多浮动体数量
+% 图片支持
+% ---- 统一图片行为：最大宽高 + 等比缩放（兼容裸 \includegraphics） ----
+\usepackage{graphicx}
+\usepackage{grffile}    % 已有也可保留：多点/空格/非 ASCII 文件名
+\usepackage{adjustbox}  % 依然可用；但下面的做法不再依赖 \pandocbounded
 
-\newsavebox{\imgbox}
-\providecommand{\pandocbounded}[1]{%
-  \sbox{\imgbox}{#1}%
-  \begin{center}
-    \ifdim\wd\imgbox>\ht\imgbox
-      \adjustbox{max width=0.7\textwidth, max height=0.55\textheight}{#1}% 减小横图尺寸
-    \else
-      \adjustbox{max width=0.3\textwidth, max height=0.4\textheight}{#1}% 增大竖图尺寸
-    \fi
-  \end{center}%
-}
+% 1) 吞掉 Pandoc 可能生成的 alt 键（即便出错版本没用也无害）
+\makeatletter
+\define@key{Gin}{alt}[]{}%
+
+% 2) 定义“最大宽/高”并把它作为 *默认* 图形键
+%    含义：若图片天然尺寸超过阈值，则等比缩小；否则保持原尺寸，不放大
+\newcommand{\graphicmaxwidth}{0.92\linewidth}
+\newcommand{\graphicmaxheight}{0.92\textheight}
+\def\maxwidth{%
+  \ifdim\Gin@nat@width>\graphicmaxwidth \graphicmaxwidth \else \Gin@nat@width \fi}
+\def\maxheight{%
+  \ifdim\Gin@nat@height>\graphicmaxheight \graphicmaxheight \else \Gin@nat@height \fi}
+
+% 3) 设为 graphicx 的默认键（调用时如果手动写了 width/height，会覆盖这里）
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\makeatother
+
+% 5) 统一 figure 的默认浮动位置为 [H]（这样即使 Pandoc 不加 [H] 也生效）
+\makeatletter
+\def\fps@figure{H}
+\makeatother
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
 
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
