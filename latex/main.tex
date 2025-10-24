@@ -1,0 +1,20 @@
+% main.tex
+\documentclass[12pt,twoside]{ctexbook}
+
+\input{preamble}  % 导入预设
+
+\begin{document}
+
+\insertcover
+
+\frontmatter
+\tableofcontents      % 自动生成目录
+\mainmatter
+
+% 文章导入
+\input{chapters/001}
+\vspace*{1cm}
+\input{chapters/002}
+\vspace*{1cm}
+
+\end{document}
