@@ -1,0 +1,196 @@
+/*章节内容样式*/
+/*版心上边距18mm 下边距20mm 左右16mm*/
+@page {
+    margin: 18mm 16mm 20mm 16mm;
+}
+/*页眉使用文章标题 页眉页码均使用黑体*/
+@page :right {
+    @top-left {
+        content: env(doc-title);
+        font-family: "SourceHanSansSC", sans-serif;
+        font-size: 8pt;
+    }
+    @bottom-left {
+        content: counter(page);
+        font-family: "SourceHanSansSC", sans-serif;
+        font-size: 8pt;
+    }
+}
+/*字体定义*/
+@page :left {
+    @top-right {
+        content: env(doc-title);
+        font-family: "SourceHanSansSC", sans-serif;
+        font-size: 8pt;
+    }
+    @bottom-right {
+        content: counter(page);
+        font-family: "SourceHanSansSC", sans-serif;
+        font-size: 8pt;
+    }
+}
+
+/*思源宋体*/
+@font-face {
+    font-family: "SourceHanSerifSC";
+    src: url("../draft/fonts/SourceHanSerifSC/SourceHanSerifSC-Regular.otf")
+        format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/*思源黑体*/
+@font-face {
+    font-family: "SourceHanSansSC";
+    src: url("../draft/fonts/SourceHanSansSC/SourceHanSansSC-Normal.otf")
+        format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/*霞鹜文楷*/
+@font-face {
+    font-family: "LXGWWenkai";
+    src: url("../draft/fonts/LXGWWenkai/LXGWWenKai-Regular.ttf")
+        format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+.article-head {
+    /*标题作者黑体*/
+    font-family: "SourceHanSansSC";
+}
+
+.article-body {
+    /*正文双栏*/
+    column-count: 2;
+    column-gap: 5mm;
+    column-fill: balance;
+
+    font-size: 10pt;
+}
+
+.article-body p {
+    /*宋体*/
+    font-family: "SourceHanSerifSC";
+    /*正文首行缩进2em*/
+    text-indent: 2em;
+    /*正文行间距*/
+    line-height: 1.8;
+}
+
+.article-body blockquote {
+    /*引用使用宋体 灰色边线*/
+    font-family: "LXGWWenkai", serif;
+    margin: 1em 0;
+    padding-left: 0.5em;
+    border-left: 2px solid #999;
+}
+
+.article-body blockquote p {
+    /*引用使用宋体 灰色边线*/
+    font-family: "LXGWWenkai", serif;
+}
+
+.article-body ul {
+    /*有序无序列表不缩进*/
+    padding-left: 0;
+    margin-left: 0;
+    list-style-position: inside;
+    /*正文行间距*/
+    line-height: 1.8;
+}
+
+.article-body ol {
+    /*有序无序列表不缩进*/
+    padding-left: 0;
+    margin-left: 0;
+    list-style-position: inside;
+    /*正文行间距*/
+    line-height: 1.8;
+}
+
+/*表格样式*/
+.article-body table {
+    /*自动分割列大小*/
+    table-layout: auto;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+
+    border-collapse: collapse; /* 边框合并，避免双线 */
+    margin: 0.8em 0; /* 表格上下留白 */
+    font-size: 8pt; /* 表格字号 */
+}
+
+.article-body th,
+.article-body td {
+    border: 0.2mm solid #999; /* 单元格细边框 */
+    padding: 0.35em 0.5em; /* 单元格内边距 */
+    vertical-align: top; /* 内容顶端对齐 */
+}
+
+.article-body tbody td:first-child,
+.article-body tbody td:last-child {
+    width: auto;
+    white-space: normal;
+}
+
+/*图片样式*/
+/*figure 上下留白*/
+.article-body figure {
+    margin: 0.8em 0;
+}
+
+/*把图片当块级元素排版；限制不超过栏宽；保持比例自适应*/
+.article-body figure img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/*图注与图片间距；图注字号；图注字体（楷体）*/
+.article-body figure figcaption {
+    margin-top: 0.4em;
+    font-size: 8pt;
+    font-family: "LXGWWenkai", serif;
+}
+
+/*在图注前自动加“图 + 编号”*/
+.article-body figure figcaption::before {
+    content: "图 " counter(figure) " ";
+}
+
+/*每遇到一个 figure，图编号计数器 +1*/
+.article-body figure {
+    counter-increment: figure;
+}
+
+/*图片可以标记居中：对带 .center 类的图片水平居中*/
+.article-body figure img.center {
+    display: block;
+    margin: 0 auto;
+}
+
+/*脚注样式*/
+section.footnotes {
+    /*脚注使用楷体*/
+    font-family: "LXGWWenkai", serif;
+    font-size: 8pt;
+}
+
+section.footnotes ol {
+    /*有序无序列表不缩进*/
+    padding-left: 0;
+    margin-left: 0;
+    list-style-position: inside;
+}
+section.footnotes li {
+    /*有序无序列表不缩进*/
+    padding-left: 0;
+    margin-left: 0;
+    list-style-position: inside;
+}
