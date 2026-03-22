@@ -60,9 +60,28 @@
     font-display: swap;
 }
 
+/*文章标题及作者*/
 .article-head {
-    /*标题作者黑体*/
-    font-family: "SourceHanSansSC";
+    font-family: "SourceHanSansSC", sans-serif;
+    margin: 0 0 10mm 0;
+}
+
+.article-head .article-author {
+    font-family: "SourceHanSansSC", sans-serif;
+    font-weight: 400;
+    font-size: 12pt;
+    line-height: 1.5;
+    margin: 0 0 8mm 0;
+    text-indent: 0;
+}
+
+.article-head .article-title {
+    font-family: "SourceHanSansSC", sans-serif;
+    font-weight: 600;
+    font-size: 26pt;
+    line-height: 1.15;
+    margin: 0;
+    text-indent: 0;
 }
 
 .article-body {
@@ -83,6 +102,49 @@
     line-height: 1.8;
 }
 
+/*文章小标题*/
+.article-body h1,
+.article-body h2,
+.article-body h3,
+.article-body h4,
+.article-body h5,
+.article-body h6 {
+    font-family: "SourceHanSansSC", sans-serif;
+    break-after: avoid;
+    break-inside: avoid;
+    page-break-after: avoid;
+}
+
+.article-body h1 {
+    font-weight: 800;
+    font-size: 18pt;
+    line-height: 1.3;
+    margin: 1.2em 0 0.8em 0;
+}
+
+.article-body h2 {
+    font-weight: 600;
+    font-size: 14pt;
+    line-height: 1.35;
+    margin: 1em 0 0.6em 0;
+}
+
+.article-body h3 {
+    font-weight: 400;
+    font-size: 12pt;
+    line-height: 1.4;
+    margin: 0.9em 0 0.5em 0;
+}
+
+.article-body h4,
+.article-body h5,
+.article-body h6 {
+    font-weight: 400;
+    font-size: 10.5pt;
+    line-height: 1.4;
+    margin: 0.8em 0 0.4em 0;
+}
+
 .article-body blockquote {
     /*引用使用宋体 灰色边线*/
     font-family: "LXGWWenkai", serif;
@@ -97,6 +159,7 @@
 }
 
 .article-body ul {
+    font-family: "SourceHanSerifSC";
     /*有序无序列表不缩进*/
     padding-left: 0;
     margin-left: 0;
@@ -106,6 +169,7 @@
 }
 
 .article-body ol {
+    font-family: "SourceHanSerifSC";
     /*有序无序列表不缩进*/
     padding-left: 0;
     margin-left: 0;

@@ -1,4 +1,26 @@
 /*====================
+  字体声明
+====================*/
+
+@font-face {
+    font-family: "SourceHanSerifSC";
+    src: url("../draft/fonts/SourceHanSerifSC/SourceHanSerifSC-Regular.otf")
+        format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "SourceHanSansSC";
+    src: url("../draft/fonts/SourceHanSansSC/SourceHanSansSC-Normal.otf")
+        format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+/*====================
   目录页全局变量
 ====================*/
 :root {
