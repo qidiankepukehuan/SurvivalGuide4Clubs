@@ -1,0 +1,10 @@
+# IDE
+.idea/
+
+# 构建输出
+.vivliostyle/
+幻协生存指南.pdf
+幻协生存指南.epub
+
+# 依赖
+node_modules/

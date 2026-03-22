@@ -1,0 +1,18 @@
+{
+  "name": "survival-guide4-club",
+  "description": "SurvivalGuide4Club",
+  "author": "探索不了一点宇宙编辑部",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "vivliostyle build",
+    "build:pdf": "vivliostyle build -o 幻协生存指南.pdf",
+    "build:epub": "vivliostyle build -o 幻协生存指南.epub",
+    "build:all": "pnpm build:pdf && pnpm build:epub",
+    "preview": "vivliostyle preview"
+  },
+  "dependencies": {
+    "@vivliostyle/cli": "10.3.0"
+  }
+}

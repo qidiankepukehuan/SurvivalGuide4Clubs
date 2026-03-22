@@ -1,0 +1,159 @@
+/*====================
+  目录页全局变量
+====================*/
+:root {
+    /*左右两栏间距*/
+    --toc-gap: 8mm;
+    /*分隔线粗细*/
+    --toc-rule: 0.35mm;
+    /*分隔线两侧留白*/
+    --toc-gutter: 3mm;
+}
+
+/*====================
+  目录页页边距
+====================*/
+@page {
+    /*版心上边距18mm 下边距20mm 左右16mm*/
+    margin: 18mm 16mm 20mm 16mm;
+}
+
+/*====================
+  页眉页码
+====================*/
+@page :right {
+    @top-left {
+        content: "幻协生存指南";
+        font-family: "SourceHanSansSC", sans-serif;
+        font-size: 8pt;
+    }
+    @bottom-left {
+        content: counter(page);
+        font-family: "SourceHanSansSC", sans-serif;
+        font-size: 8pt;
+    }
+}
+@page :left {
+    @top-right {
+        content: "幻协生存指南";
+        font-family: "SourceHanSansSC", sans-serif;
+        font-size: 8pt;
+    }
+    @bottom-right {
+        content: counter(page);
+        font-family: "SourceHanSansSC", sans-serif;
+        font-size: 8pt;
+    }
+}
+
+/*====================
+  双栏版式（左/右 = 4:6）——用 flex，兼顾分页与不拆栏
+====================*/
+.toc-page {
+    display: flex;
+    gap: var(--toc-gap);
+    align-items: flex-start;
+}
+
+/* 左右比例 4:6 */
+.toc-left {
+    flex: 4 1 0;
+}
+.toc-right {
+    flex: 6 1 0;
+}
+
+/* 防止左右栏被拆到不同页：尽量整块一起走（有帮助） */
+.toc-left,
+.toc-right {
+    break-inside: avoid;
+}
+/*====================
+  左栏：基础信息
+====================*/
+.toc-left {
+    padding-right: var(--toc-gutter);
+    border-right: var(--toc-rule) solid currentColor;
+}
+
+.toc-left .brand {
+    margin: 0 0 6mm 0;
+    font-size: 20pt;
+    line-height: 1.05;
+    font-family: "SourceHanSansSC", sans-serif;
+}
+
+.toc-left .meta,
+.toc-left .block {
+    font-size: 10pt;
+    line-height: 1.5;
+    font-family: "SourceHanSerifSC", serif;
+}
+
+.toc-left .note {
+    font-size: 8pt;
+    line-height: 1.5;
+    font-family: "SourceHanSerifSC", serif;
+    break-before: page;
+}
+
+.toc-left .thanks {
+    font-size: 8pt;
+    line-height: 1.5;
+    font-family: "SourceHanSerifSC", serif;
+}
+
+.toc-left .block h2 {
+    margin: 0 0 2.5mm 0;
+    font-size: 12pt;
+    font-family: "SourceHanSansSC", sans-serif;
+}
+
+/*====================
+  右栏：目录标题
+====================*/
+.toc-right {
+    padding-left: var(--toc-gutter);
+}
+
+.toc-title,
+nav[role="doc-toc"] {
+    display: block;
+    width: 100%;
+    float: none;
+}
+
+/*====================
+  TOC 列表（Vivliostyle 注入）
+====================*/
+nav[role="doc-toc"] > h2 {
+    display: none;
+}
+
+nav[role="doc-toc"] ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav[role="doc-toc"] > ol > li {
+    margin: 0 0 2.2mm 0;
+    font-size: 11pt;
+    line-height: 1.35;
+    font-family: "SourceHanSerifSC", serif;
+}
+
+nav[role="doc-toc"] a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/*点线 + 页码*/
+nav[role="doc-toc"] a::after {
+    content: leader(".") target-counter(attr(href), page);
+}
+
+/*多级目录的缩进*/
+nav[role="doc-toc"] li > ol {
+    margin: 2mm 0 3mm 6mm;
+}
