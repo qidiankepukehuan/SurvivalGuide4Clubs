@@ -1,0 +1,17 @@
+[project]
+name = "survival-guide-tools"
+version = "0.1.0"
+description = "幻协生存指南项目工具"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "python-docx>=1.1.0",
+    "Pillow>=10.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = []

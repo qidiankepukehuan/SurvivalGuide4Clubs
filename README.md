@@ -56,6 +56,10 @@ SurvivalGuide4Club/
 pnpm install
 ```
 
+### 支持 Claude
+
+本项目支持 Claude Code，可通过 `/skill` 调用项目内置的 Skills 辅助开发。
+
 ### 构建
 
 ```bash
