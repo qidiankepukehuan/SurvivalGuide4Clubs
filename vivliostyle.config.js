@@ -31,6 +31,7 @@ export default defineConfig({
     },
     "./draft/posts/前言.md",
     "./draft/posts/如何管理社团.md",
+    "./draft/posts/如何管理小社团.md",
     "./draft/posts/如何做外联.md",
     "./draft/posts/如何出摊.md",
     "./draft/posts/如何开展观影活动.md",
